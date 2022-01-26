@@ -17,7 +17,7 @@ use App\Http\Controllers\FornecedorController;
 |
 */
 
-Route::get('/', [PrincipalController::class, 'principal'])->name('site.index');
+Route::get('/', [PrincipalController::class, 'principal'])->name('site.index')->middleware('log.acesso');
 
 
 Route::get('/sobre-nos',  [SobreNosController::class, 'sobreNos'])->name('site.sobrenos');
@@ -28,9 +28,9 @@ Route::post('/contato', [ContatoController::class, 'salvar'])->name('site.contat
 Route::get('/login', function() { return 'login'; })->name('site.login');
 
 Route::prefix('/app')->group(function() {    
-    Route::get('/clientes',function() { return 'clientes'; })->name('app.clientes');
-    Route::get('/fornecedores', [FornecedorController::class, 'index'])->name('app.forncedores');
-    Route::get('/produtos', function() { return 'produtos'; })->name('app.produtos');
+    Route::get('/clientes',function() { return 'clientes'; })->name('app.clientes')->middleware('log.acesso', 'autenticacao');
+    Route::get('/fornecedores', [FornecedorController::class, 'index'])->name('app.forncedores')->middleware('log.acesso', 'autenticacao');
+    Route::get('/produtos', function() { return 'produtos'; })->name('app.produtos')->middleware('log.acesso', 'autenticacao');
 });
 
 Route::fallback(function() {
