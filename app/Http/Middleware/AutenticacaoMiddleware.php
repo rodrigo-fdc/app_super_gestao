@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Http\Controllers\LoginController;
 
 class AutenticacaoMiddleware
 {
@@ -14,9 +16,14 @@ class AutenticacaoMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next)
+    public function handle($request, Closure $next, $metodo_autenticacao, $perfil, $param3, $param4)
     {
-        //return $next($request);
-        return Response('Acesso negado! Rota exige autenticação!!!');
+        session_start();
+
+        if(isset($_SESSION['email']) && $_SESSION['email'] != '') {
+            return $next($request);
+        } else {
+            return redirect()->route('site.login', ['erro' => 2]);
+        }
     }
 }
